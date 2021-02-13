@@ -1,0 +1,212 @@
+<template>
+    <form method="POST" v-on:submit.prevent="createClinicHistory">
+        <div class="modal fade" id="create-history">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>Crear Historia Clinica</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="name">Nombre Dueño</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" name="name" class="form-control mt-1" v-model="newName">
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="lastname">Apellidos</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" name="lastname" class="form-control mt-1" v-model="newLastName">
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="select_document">Tipo Documento</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="custom-select mt-1" id="select_document" name="document_type"
+                                    v-model="newDocumentType">
+                                    <option selected value="CC">CC</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PA">PA</option>
+                                </select>
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="identification">Identificación</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" min="0" name="identification" class="form-control mt-1"
+                                    v-model="newIdentification">
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="select_status">Estado</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="custom-select mt-1" id="select_status" name="status" v-model="newStatus">
+                                    <option selected value="ACTIVO">ACTIVO</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                </select>
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="select_gender">Género</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="custom-select mt-1" id="select_gender" name="gender" v-model="newGender">
+                                    <option selected value="Hombre">Hombre</option>
+                                    <option value="Mujer">Mujer</option>
+                                </select>
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="border-bottom mt-3 mb-3"></div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="pet_name">Nombre Mascota</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" name="pet_name" class="form-control mt-1" v-model="newPetName">
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="race">Raza</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" name="race" class="form-control mt-1" v-model="newRace">
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm-4 mt-1">
+                                <label for="select_gender_pet">Sexo</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="custom-select mt-1" id="select_gender_pet" name="gender_pet"
+                                    v-model="newPetGender">
+                                    <option selected value="Macho">Macho</option>
+                                    <option value="Hembra">Hembra</option>
+                                </select>
+                                <span v-for="error in errors" class="text-danger">@{{ error }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+
+<script>
+    import axios from 'axios';
+
+    export default {
+        data() {
+            return {
+                histories: [],
+                newName: '',
+                newLastName: '',
+                newDocumentType: '',
+                newIdentification: 0,
+                newStatus: '',
+                newGender: '',
+                newPetName: '',
+                newRace: '',
+                newPetGender: '',
+                errors: [],
+            }
+        },
+        methods: {
+            createClinicHistory: function () {
+                /*USER POST*/
+                var url = 'user';
+                axios.post(url, {
+                    nombreUser: this.newName,
+                    apellido: this.newLastName,
+                    tipo_documento: this.newDocumentType,
+                    documento_identificacion: this.newIdentification,
+                    estado: this.newStatus,
+                    genero: this.newGender,
+
+                }).then(response => {
+                    console.log('Usuario Creado');
+                    /*PET POST*/
+                    var url = 'pet';
+                    axios.post(url, {
+                        nombrePet: this.newPetName,
+                        raza: this.newRace,
+                        sexo: this.newPetGender
+
+                    }).then(response => {
+                        console.log('Mascota Creada');
+
+                        /*CLINIC-HISTORY POST*/
+                        var url = 'clinic-history';
+                        axios.post(url, {
+
+                        }).then(response => {
+                            console.log('Historia Creada');
+
+                            this.newName = '';
+                            this.newLastName = '';
+                            this.newDocumentType = '';
+                            this.newIdentification = '';
+                            this.newStatus = '';
+                            this.newGender = '';
+
+                            this.newPetName = '';
+                            this.newRace = '';
+                            this.newPetGender = '';
+
+                            this.errors = [];
+                            $('#create-history').modal('hide');
+                            this.$root.$refs.A.getHistories();
+                            /*  toastr.success('Nueva tarea creada con exito'); */
+
+                        }).catch(error => {
+                            this.errors = error.response.data
+                        }); /*CLINIC-HISTORY CLOSE POST */
+
+                    }).catch(error => {
+                        this.errors = error.response.data
+                    }); /* PET CLOSE POST*/
+
+                }).catch(error => {
+                    this.errors = error.response.data
+                }); /*USER CLOSE POST*/
+            },
+        }
+    }
+
+</script>
